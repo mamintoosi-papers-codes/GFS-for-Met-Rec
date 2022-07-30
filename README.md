@@ -40,9 +40,9 @@ All of the datasets used here are accessible from <em>data</em> folder.
 
 ### Results
 The best graph features for Breast anti-cancer metabolite recommendation
-![Stomach](results%5CFS_St_AC_Met_Plant_mc1_k1-9_apk.png)
+![Stomach](results/FS_St_AC_Met_Plant_mc1_k1-9_apk.png)
 
 The best graph features for Stomach anti-cancer metabolite recommendation
-![Breast](results%5CFS_Br_AC_Met_Plant_mc1_k1-9_apk.png)
+![Breast](results/FS_Br_AC_Met_Plant_mc1_k1-9_apk.png)
 
 [![Github All Releases](https://img.shields.io/github/downloads/mamintoosi-papers-codes/GFS-for-Met-Rec/total.svg)]()

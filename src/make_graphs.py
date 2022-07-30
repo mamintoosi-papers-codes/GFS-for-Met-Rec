@@ -4,9 +4,7 @@
 #    Mahmood Amintoosi <m.amintoosi@gmail.com>
 #    All rights reserved.
 #    MIT license.
-"""Main for feature selection"""
-
-# برنامه انتخاب ویژگی‌هایی از گراف که در انتخاب نودهای ضد سرطان مؤثرتر هستند
+"""Main for Making CSV files of Adj. Matrix of Graphs"""
 
 from pandas import ExcelWriter
 import pandas as pd
@@ -141,121 +139,121 @@ if __name__ == '__main__':
             # print('Sub graph info: ', dfct_subG.shape)
 
             # print('Computing the graph features...\n')
-            gf_df, gf_df_sorted = rank_using_graph_features(subG, weight='weight') #, min_count, node_objects, \
-                # edge_objects, data_dir, output_dir, working_file_name)
+            # gf_df, gf_df_sorted = rank_using_graph_features(subG, weight='weight') #, min_count, node_objects, \
+            #     # edge_objects, data_dir, output_dir, working_file_name)
 
-            n_features = gf_df.shape[1]-1
-            indices = list(powerset(range(n_features)))
-            # remove the empty subset
-            indices.pop(0)
+            # n_features = gf_df.shape[1]-1
+            # indices = list(powerset(range(n_features)))
+            # # remove the empty subset
+            # indices.pop(0)
 
-            # print(indices)
-            APK = []
-            scores = []
-            DF_list= list()
-            SDF_list= list()
-            for set_no, idx in enumerate(indices):
-                cols_s = list(idx) # columns with feature_sum
-                cols_s.append(-1)
-                # SettingWithCopyWarning دیپ کپی برای اجتناب از خطای 
-                selected_df = gf_df.iloc[:, cols_s].copy(deep=True)
-                # print(cols,cols_s,selected_df.shape)#,cols_s)
-                n_cols = selected_df.shape[1]-1
-                features_sum = selected_df.iloc[:,:n_cols].sum(axis=1)
-                selected_df['features_sum'] = features_sum
-                selected_df_sorted = selected_df.sort_values(by='features_sum', ascending=False)
+            # # print(indices)
+            # APK = []
+            # scores = []
+            # DF_list= list()
+            # SDF_list= list()
+            # for set_no, idx in enumerate(indices):
+            #     cols_s = list(idx) # columns with feature_sum
+            #     cols_s.append(-1)
+            #     # SettingWithCopyWarning دیپ کپی برای اجتناب از خطای 
+            #     selected_df = gf_df.iloc[:, cols_s].copy(deep=True)
+            #     # print(cols,cols_s,selected_df.shape)#,cols_s)
+            #     n_cols = selected_df.shape[1]-1
+            #     features_sum = selected_df.iloc[:,:n_cols].sum(axis=1)
+            #     selected_df['features_sum'] = features_sum
+            #     selected_df_sorted = selected_df.sort_values(by='features_sum', ascending=False)
                 
-                DF_list.append(selected_df)
-                SDF_list.append(selected_df_sorted)
+            #     DF_list.append(selected_df)
+            #     SDF_list.append(selected_df_sorted)
                 
-                pred_list = list(selected_df_sorted.index.values)
-                # print(obj_fun(true_list,pred_list))
+            #     pred_list = list(selected_df_sorted.index.values)
+            #     # print(obj_fun(true_list,pred_list))
 
-                for i_apk_index in index:
-                    apk_index = np.arange(1,i_apk_index+1) # +۱ باید باشه وگرنه اولیش تهی هست
-                    score = obj_fun(true_list, pred_list, apk_index)
-                    scores.append(score)
-                    jadval_row_no += 1
-                    jadval.loc[jadval_row_no] = [min_count, set_no+1, i_apk_index, score]
+            #     for i_apk_index in index:
+            #         apk_index = np.arange(1,i_apk_index+1) # +۱ باید باشه وگرنه اولیش تهی هست
+            #         score = obj_fun(true_list, pred_list, apk_index)
+            #         scores.append(score)
+            #         jadval_row_no += 1
+            #         jadval.loc[jadval_row_no] = [min_count, set_no+1, i_apk_index, score]
             progress_bar.update(1) # update progress
 
 
-    # رسم نمودار تکی 
-    min_count = 1
-    # m, n = 2, 3
-    fig, ax = plt.subplots(1, 1, figsize=(8, 5))        
+    # # رسم نمودار تکی 
+    # min_count = 1
+    # # m, n = 2, 3
+    # fig, ax = plt.subplots(1, 1, figsize=(8, 5))        
 
-    #  show error bands
-    df = jadval[(jadval['Min Count']==min_count)]
-    # ax=axes[1, 0]
-    sns.lineplot(ax=ax,
-                x="Set No", y="AP@k",
-                # hue="k",# 
-                #  style="Min Count",
-                data=df)
-    ax.set_title('k='+str(index))
-    # ax.set(ylim=(0, 1))
-
-    f = {'AP@k':'mean'} #'Min Count':'first',
-    df_mean_score = df.groupby(['Set No'], as_index=False).agg(f)
-    # نمودار وسطی قبلی با همین میانگین یکی هست
-    # sns.lineplot(ax=axes[1, 1],
+    # #  show error bands
+    # df = jadval[(jadval['Min Count']==min_count)]
+    # # ax=axes[1, 0]
+    # sns.lineplot(ax=ax,
     #             x="Set No", y="AP@k",
-    #             data=df_mean_score)
-    x, y = df_mean_score['AP@k'].idxmax(),df_mean_score['AP@k'].max()
-    # ax=axes[1, 0]
-    ax.scatter(x+1, y, marker='o', color='g', s=100)
-    f_names = list(gf_df.keys().format())
-    best_idx = int(x)
-    best_features = [f_names[i] for i in indices[best_idx]]
-    features_list = '{:d}th subset,\nwhich contains\n{:d} elements:'.format(best_idx+1,len(best_features))
-    for i,s in enumerate(best_features):
-        # if i==0:
-        #     features_list = s
-        # else:
-        features_list += "\n"+s
-    ax.text(x+2, 0.7, features_list, fontsize=12, color='g') #add text
+    #             # hue="k",# 
+    #             #  style="Min Count",
+    #             data=df)
+    # ax.set_title('k='+str(index))
+    # # ax.set(ylim=(0, 1))
 
-    x, y = df_mean_score['AP@k'].idxmin(),df_mean_score['AP@k'].min()
-    # ax=axes[1, 0]
-    ax.scatter(x+1, y, marker='o', color='r', s=100)
-    f_names = list(gf_df.keys().format())
-    best_idx = int(x)
-    best_features = [f_names[i] for i in indices[best_idx]]
-    features_list = '{:d}th subset,\nwhich contains\n{:d} elements:'.format(best_idx+1,len(best_features))
-    for i,s in enumerate(best_features):
-        features_list += "\n"+s
-    ax.text(x+2, 0, features_list, fontsize=12, color='r') #add text
+    # f = {'AP@k':'mean'} #'Min Count':'first',
+    # df_mean_score = df.groupby(['Set No'], as_index=False).agg(f)
+    # # نمودار وسطی قبلی با همین میانگین یکی هست
+    # # sns.lineplot(ax=axes[1, 1],
+    # #             x="Set No", y="AP@k",
+    # #             data=df_mean_score)
+    # x, y = df_mean_score['AP@k'].idxmax(),df_mean_score['AP@k'].max()
+    # # ax=axes[1, 0]
+    # ax.scatter(x+1, y, marker='o', color='g', s=100)
+    # f_names = list(gf_df.keys().format())
+    # best_idx = int(x)
+    # best_features = [f_names[i] for i in indices[best_idx]]
+    # features_list = '{:d}th subset,\nwhich contains\n{:d} elements:'.format(best_idx+1,len(best_features))
+    # for i,s in enumerate(best_features):
+    #     # if i==0:
+    #     #     features_list = s
+    #     # else:
+    #     features_list += "\n"+s
+    # ax.text(x, 0, features_list, fontsize=12, color='g') #add text
 
-    png_file_name = 'results/FS_{}_{}_{}_{}_mc{:d}_k{:d}-{:d}_apk.png'.format(working_file_name[:2], GT_file_name[:2], \
-        node_objects, edge_objects, min_count, index[0],index[-1])
-    plt.savefig(png_file_name)
+    # x, y = df_mean_score['AP@k'].idxmin(),df_mean_score['AP@k'].min()
+    # # ax=axes[1, 0]
+    # ax.scatter(x+1, y, marker='o', color='r', s=100)
+    # f_names = list(gf_df.keys().format())
+    # best_idx = int(x)
+    # best_features = [f_names[i] for i in indices[best_idx]]
+    # features_list = '{:d}th subset,\nwhich contains\n{:d} elements:'.format(best_idx+1,len(best_features))
+    # for i,s in enumerate(best_features):
+    #     features_list += "\n"+s
+    # ax.text(x, 0, features_list, fontsize=12, color='r') #add text
+
+    # png_file_name = 'results/FS_{}_{}_{}_{}_mc{:d}_k{:d}-{:d}_apk.png'.format(working_file_name[:2], GT_file_name[:2], \
+    #     node_objects, edge_objects, min_count, index[0],index[-1])
+    # plt.savefig(png_file_name)
 
 
-    # # رسم نمودار مین‌کانت‌های مختلف رو در اینجا در گوگل کولب دارم که فعلا حذف می کنم
-    # df_max_score = jadval.groupby(['Set No', 'Min Count'])['AP@k'].mean().reset_index(name='mAP@k')
+    # # # رسم نمودار مین‌کانت‌های مختلف رو در اینجا در گوگل کولب دارم که فعلا حذف می کنم
+    # # df_max_score = jadval.groupby(['Set No', 'Min Count'])['AP@k'].mean().reset_index(name='mAP@k')
 
-    # توجه: در اینجا فقط ویژگی‌های آخرین زیرگراف ذخیره می‌شوند 
-    xls_file_name = 'results/FS_{}_{}_{}_{}_mc{:d}-{:d}.xlsx'.format(working_file_name[:2], GT_file_name[:2], \
-        node_objects, edge_objects, min_count_list[0], min_count_list[-1])
-    writer = ExcelWriter(xls_file_name)
-    jadval.to_excel(writer, sheet_name='jadval')  # , index=False)
-    # gf_df_sorted.to_excel(writer, sheet_name='gf_df_sorted')  # , index=False)
-    # gf_df.to_excel(writer, sheet_name='gf_df')  # , index=False)
+    # # توجه: در اینجا فقط ویژگی‌های آخرین زیرگراف ذخیره می‌شوند 
+    # xls_file_name = 'results/FS_{}_{}_{}_{}_mc{:d}-{:d}.xlsx'.format(working_file_name[:2], GT_file_name[:2], \
+    #     node_objects, edge_objects, min_count_list[0], min_count_list[-1])
+    # writer = ExcelWriter(xls_file_name)
+    # jadval.to_excel(writer, sheet_name='jadval')  # , index=False)
+    # # gf_df_sorted.to_excel(writer, sheet_name='gf_df_sorted')  # , index=False)
+    # # gf_df.to_excel(writer, sheet_name='gf_df')  # , index=False)
 
-    x_max, x_min = df_mean_score['AP@k'].idxmax(), df_mean_score['AP@k'].idxmin()
-    SDF_list[x_max].to_excel(writer, sheet_name='gf_df_max_sorted')  # , index=False)
-    SDF_list[x_min].to_excel(writer, sheet_name='gf_df_min_sorted')  # , index=False)
-    DF_list[x_max].to_excel(writer, sheet_name='gf_df_max')  # , index=False)
-    writer.save()
+    # x_max, x_min = df_mean_score['AP@k'].idxmax(), df_mean_score['AP@k'].idxmin()
+    # SDF_list[x_max].to_excel(writer, sheet_name='gf_df_max_sorted')  # , index=False)
+    # SDF_list[x_min].to_excel(writer, sheet_name='gf_df_min_sorted')  # , index=False)
+    # DF_list[x_max].to_excel(writer, sheet_name='gf_df_max')  # , index=False)
+    # writer.save()
 
-    # چاپ لیست ویژگی‌ها
-    # all_features_sets = []
-    # for idx in range(len(indices)):
-    #     all_features_sets.append([f_names[i] for i in indices[idx]])
-    # for i,item in enumerate(all_features_sets):
-    #     print(i,item)
+    # # چاپ لیست ویژگی‌ها
+    # # all_features_sets = []
+    # # for idx in range(len(indices)):
+    # #     all_features_sets.append([f_names[i] for i in indices[idx]])
+    # # for i,item in enumerate(all_features_sets):
+    # #     print(i,item)
 
-    # s1 = gf_fim_df_sorted['degree_cent']
-    # s2 = gf_fim_df_sorted['degree_fim']
-    # print('Correlation of degree and degree_fim:',s1.corr(s2))
+    # # s1 = gf_fim_df_sorted['degree_cent']
+    # # s2 = gf_fim_df_sorted['degree_fim']
+    # # print('Correlation of degree and degree_fim:',s1.corr(s2))

@@ -1,14 +1,15 @@
-Feature Selection in Bio Graphs
+Graph Feature Selection for Metabolite Recommendation
 ==========
- [![repo size](https://img.shields.io/github/repo-size/mamintoosi/FS-in-Bio-Graphs.svg)](https://github.com/mamintoosi/FS-in-Bio-Graphs/archive/master.zip)
- [![GitHub forks](https://img.shields.io/github/forks/mamintoosi/FS-in-Bio-Graphs)](https://github.com/mamintoosi/FS-in-Bio-Graphs/network)
-[![GitHub issues](https://img.shields.io/github/issues/mamintoosi/FS-in-Bio-Graphs)](https://github.com/mamintoosi/FS-in-Bio-Graphs/issues)
-[![GitHub license](https://img.shields.io/github/license/mamintoosi/FS-in-Bio-Graphs)](https://github.com/mamintoosi/FS-in-Bio-Graphs/blob/main/LICENSE)
+ [![repo size](https://img.shields.io/github/repo-size/mamintoosi-papers-codes/GFS-for-Met-Rec.svg)](https://github.com/mamintoosi-papers-codes/GFS-for-Met-Rec/archive/master.zip)
+ [![GitHub forks](https://img.shields.io/github/forks/mamintoosi-papers-codes/GFS-for-Met-Rec)](https://github.com/mamintoosi-papers-codes/GFS-for-Met-Rec/network)
+[![GitHub issues](https://img.shields.io/github/issues/mamintoosi-papers-codes/GFS-for-Met-Rec)](https://github.com/mamintoosi-papers-codes/GFS-for-Met-Rec/issues)
+[![GitHub license](https://img.shields.io/github/license/mamintoosi-papers-codes/GFS-for-Met-Rec)](https://github.com/mamintoosi-papers-codes/GFS-for-Met-Rec/blob/main/LICENSE)
  
  
-A Python implementation of "Feature Selection in Bio Graphs" 
+A Python implementation of "Graph Feature Selection for Metabolite Recommendation" 
 <p align="center">
-  <img width="600" src="doc/header.png">
+  <img width="600" src="doc/fungal_metabolite_-_aflatoxin_b1.webp">
+  <a href="https://www.thermofisher.com/blog/food/turbulent-flow-clean-up-for-plant-and-fungal-metabolite-screening/">Image Source</a>
 </p>
 
 ### Abstract
@@ -19,9 +20,9 @@ Motivation: Every year tremendous experimental analysis has been done for evalua
 Results:   The proposed method could be employed to select the best graph features in screening of anti-cancer plants from an unverified plants list. So that, the plant with higher score in the list have higher chance to have anti-cancer properties. Although, different graph features are applicable for anti-cancer plant recommendation in each cancer type.
 </p>
 
-This repository provides a Python implementation of FS-in-Bio-Graphs as described in the draft paper:
+This repository provides a Python implementation of GFS-for-Met-Rec as described in the draft paper:
 
-> Feature Selection in Bio-Graphs,
+> Graph Feature Selection for Metabolite Recommendation,
 > Mahmood Amintoosi, Eisa Kohan
 > 2022
 
@@ -30,7 +31,7 @@ This repository provides a Python implementation of FS-in-Bio-Graphs as describe
 The codebase is implemented in Python 3.7.11 on Google colab. 
 
 ### Run on Google Colab
-https://colab.research.google.com/github/mamintoosi/FS-in-Bio-Graphs/blob/master/FS_in_Bio_Graphs.ipynb
+https://colab.research.google.com/github/mamintoosi-papers-codes/GFS-for-Met-Rec/blob/master/GFS-for-Met-Rec.ipynb
 
 ### Datasets
 <p align="justify">
@@ -38,10 +39,10 @@ All of the datasets used here are accessible from <em>data</em> folder.
 </p>
 
 ### Results
-The best graph features for Breast anti-cancer plant recommendation
-![Stomach](results%5CFS_AC_St_Plant_Met_mc1_k1-9_apk.png)
+The best graph features for Breast anti-cancer metabolite recommendation
+![Stomach](results%5CFS_St_AC_Met_Plant_mc1_k1-9_apk.png)
 
-The best graph features for Stomach anti-cancer plant recommendation
-![Breast](results%5CFS_AC_Br_Plant_Met_mc1_k1-9_apk.png)
+The best graph features for Stomach anti-cancer metabolite recommendation
+![Breast](results%5CFS_Br_AC_Met_Plant_mc1_k1-9_apk.png)
 
-[![Github All Releases](https://img.shields.io/github/downloads/mamintoosi/FS-in-Bio-Graphs/total.svg)]()
+[![Github All Releases](https://img.shields.io/github/downloads/mamintoosi-papers-codes/GFS-for-Met-Rec/total.svg)]()

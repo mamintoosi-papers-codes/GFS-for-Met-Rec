@@ -27,6 +27,7 @@ import argparse
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset_name', type = str, default = 'stomach')
+    parser.add_argument('--node_type', type = str, default = 'plant')
     args = parser.parse_args()
 
     return args
@@ -59,8 +60,14 @@ if __name__ == '__main__':
     else:
         print('Unknown dataset')
         exit(1)
-    node_objects = 'Plant'
-    edge_objects = 'Met'
+    
+    if args.node_type.lower() == 'plant':            
+        node_objects = 'Plant'
+        edge_objects = 'Met'
+    else:
+        node_objects = 'Met'
+        edge_objects = 'Plant'
+        working_file_name, GT_file_name = GT_file_name, working_file_name
 
     working_file = working_dir+working_file_name
     wdf = pd.read_excel(working_file, engine="openpyxl") 
@@ -89,19 +96,19 @@ if __name__ == '__main__':
     
     # intersected_nodes = set(wdf['Plant'].unique()).intersection(set(true_df['Plant'].unique()))
 
-    true_list = list(true_df['Plant'].unique())
+    true_list = list(true_df[node_objects].unique())
     # true_list
     
-    # SDF_list = xl.parse('gf_df_max_sorted')  # , index=False)
-    # recom_list = list(SDF_list.iloc[:,0].values[:20])
-    # # recom_list
-    # print("Best Recom List:")
-    # for p in recom_list:
-    #     flag = 1 if p in true_list else 0
-    #     print(p, flag)
+    SDF_list = xl.parse('gf_df_max_sorted')  # , index=False)
+    recom_list = list(SDF_list.iloc[:,0].values[:12])
+    # recom_list
+    print("Best Recom List:")
+    for p in recom_list:
+        flag = 1 if p in true_list else 0
+        print(p, flag)
         
     SDF_list = xl.parse('gf_df_min_sorted')  # , index=False)
-    recom_list = list(SDF_list.iloc[:,0].values[:20])        
+    recom_list = list(SDF_list.iloc[:,0].values[:12])        
     print("Worst Recom List:")
     for p in recom_list:
         flag = 1 if p in true_list else 0
